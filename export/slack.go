@@ -21,10 +21,11 @@ func SendMessageToSlack(request *thirdParty.SlackRequest, result *scan.Result) {
 		return
 	}
 
-	_, err = http.Post(request.WebhookUrl, "application/json", bytes.NewBuffer(payloadBytes))
+	resp, err := http.Post(request.WebhookUrl, "application/json", bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		logger.Print("fail to send message to slack", err)
 	}
+	logger.Print("response status:", resp.Status)
 }
 
 func formatMessage(result *scan.Result) (sm thirdParty.SlackMessage) {

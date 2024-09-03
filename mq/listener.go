@@ -2,7 +2,6 @@ package mq
 
 import (
 	"GoExporter/export"
-	"GoExporter/scan"
 	"GoExporter/thirdParty"
 	"GoExporter/xLogger"
 	"encoding/json"
@@ -72,53 +71,18 @@ func Listen() {
 
 	go func() {
 		for d := range msgList {
-			var msgMap map[string]interface{}
-			if err := json.Unmarshal(d.Body, &msgMap); err != nil {
+			var msg Message
+			if err := json.Unmarshal(d.Body, &msg); err != nil {
 				logger.Printf("error parsing JSON: %s", err)
 				continue
 			}
 
-			app, ok := msgMap["application"]
-			if !ok {
-				logger.Printf("error parsing application")
-			}
-
-			result, ok := msgMap["result"]
-			if !ok {
-				logger.Printf("error parsing result")
-			}
-
-			resultMap, ok := result.(map[string]interface{})
-			if !ok {
-				logger.Printf("error parsing result")
-			}
-
-			scanType, ok := resultMap["scanType"].(string)
-			if !ok {
-				logger.Printf("error parsing scanType")
-			}
-
-			vulnerabilities, ok := resultMap["Vulnerabilities"].([]scan.Vulnerability)
-			if !ok {
-				logger.Printf("error parsing vulnerabilities")
-			}
-
-			scanResult := &scan.Result{
-				ScanType:        scanType,
-				Vulnerabilities: vulnerabilities,
-			}
-
-			switch app {
+			switch msg.Application {
 			case "slack":
-				webhookUrl, ok := msgMap["webhookUrl"].(string)
-				if !ok {
-					logger.Printf("error parsing webhookUrl: %s", err)
-					continue
-				}
 				request := &thirdParty.SlackRequest{
-					WebhookUrl: webhookUrl,
+					WebhookUrl: msg.WebhookUrl,
 				}
-				export.SendMessageToSlack(request, scanResult)
+				export.SendMessageToSlack(request, &msg.Result)
 				break
 			}
 		}

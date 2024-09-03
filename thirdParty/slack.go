@@ -11,7 +11,7 @@ type SlackMessageText struct {
 
 type SlackMessageBlock struct {
 	Type string            `json:"type"`
-	Text *SlackMessageText `json:"text"`
+	Text *SlackMessageText `json:"text,omitempty"`
 }
 
 type SlackMessage struct {
