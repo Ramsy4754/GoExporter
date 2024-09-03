@@ -5,6 +5,7 @@
 ```
 {
     "applicatoin": "slack",
+    "webhookUrl": "<SLACK_WEBHOOK_URL>",
     "scanType": "image_scan",
     "vulnerabilities": [
         {"cve": "CVE-2021-44228", "severity": "Critical", "description": "Log4j vulnerability"},
