@@ -1,3 +1,8 @@
+# Build Project
+```
+batch.bat
+```
+
 # Message Format
 
 ## Slack
