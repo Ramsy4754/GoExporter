@@ -2,6 +2,7 @@ package mq
 
 import (
 	"GoExporter/export"
+	"GoExporter/scan"
 	"GoExporter/thirdParty"
 	"GoExporter/xLogger"
 	"encoding/json"
@@ -79,11 +80,42 @@ func Listen() {
 
 			switch msg.Application {
 			case "slack":
-				request := &thirdParty.SlackRequest{
-					WebhookUrl: msg.WebhookUrl,
+				switch msg.Event {
+				case "afterCwppScan":
+					request := &thirdParty.SlackRequest{
+						WebhookUrl: msg.WebhookUrl,
+					}
+
+					result := &scan.Result{
+						ScanType:        "",
+						Vulnerabilities: nil,
+					}
+					export.SendCwppScanResultToSlack(request, result)
+					break
+				case "beforeCwppScan":
+					request := &thirdParty.SlackRequest{
+						WebhookUrl: msg.WebhookUrl,
+					}
+
+					args := msg.Args.(map[string]interface{})
+					provider := args["provider"].(string)
+					userId := args["userId"].(string)
+					scanGroupName := args["scanGroupName"].(string)
+					keyName := args["keyName"].(string)
+					start := &scan.StartInfo{
+						Provider:      provider,
+						UserId:        userId,
+						ScanGroupName: scanGroupName,
+						KeyName:       keyName,
+					}
+
+					export.SendCwppScanStartToSlack(request, start)
+				default:
+					logger.Printf("unknown event: %s", msg.Event)
 				}
-				export.SendMessageToSlack(request, &msg.Result)
 				break
+			default:
+				logger.Printf("unknown application: %s", msg.Application)
 			}
 		}
 	}()

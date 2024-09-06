@@ -10,3 +10,10 @@ type Result struct {
 	ScanType        string          `json:"scanType"`
 	Vulnerabilities []Vulnerability `json:"vulnerabilities"`
 }
+
+type StartInfo struct {
+	Provider      string `json:"provider"`
+	UserId        string `json:"userId"`
+	ScanGroupName string `json:"scanGroupName"`
+	KeyName       string `json:"keyName"`
+}

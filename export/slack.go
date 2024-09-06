@@ -10,10 +10,10 @@ import (
 	"net/http"
 )
 
-func SendMessageToSlack(request *thirdParty.SlackRequest, result *scan.Result) {
+func SendCwppScanResultToSlack(request *thirdParty.SlackRequest, result *scan.Result) {
 	logger := xLogger.GetLogger()
 
-	payload := formatMessage(result)
+	payload := formatCwppScanResultMessage(result)
 
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
@@ -28,12 +28,56 @@ func SendMessageToSlack(request *thirdParty.SlackRequest, result *scan.Result) {
 	logger.Print("response status:", resp.Status)
 }
 
-func formatMessage(result *scan.Result) (sm thirdParty.SlackMessage) {
+func formatCwppScanResultMessage(result *scan.Result) (sm thirdParty.SlackMessage) {
+	//sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+	//	Type: "section",
+	//	Text: &thirdParty.SlackMessageText{
+	//		Type: "mrkdwn",
+	//		Text: fmt.Sprintf("*CWPP Scan Result: %s*", result.ScanType),
+	//	},
+	//})
+	//
+	//sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+	//	Type: "divider",
+	//})
+	//
+	//for _, vuln := range result.Vulnerabilities {
+	//	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+	//		Type: "section",
+	//		Text: &thirdParty.SlackMessageText{
+	//			Type: "mrkdwn",
+	//			Text: fmt.Sprintf("*CVE:* %s\n*Severity:* %s\n*Description:* %s", vuln.Cve, vuln.Severity, vuln.Description),
+	//		},
+	//	})
+	//}
+	return
+}
+
+func SendCwppScanStartToSlack(request *thirdParty.SlackRequest, start *scan.StartInfo) {
+	logger := xLogger.GetLogger()
+
+	payload := formatCwppScanStartMessage(start)
+
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		logger.Println("error marshalling json:", err)
+		return
+	}
+
+	resp, err := http.Post(request.WebhookUrl, "application/json", bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		logger.Print("failed to send message to slack", err)
+		return
+	}
+	logger.Print("response status:", resp.Status)
+}
+
+func formatCwppScanStartMessage(start *scan.StartInfo) (sm thirdParty.SlackMessage) {
 	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
 		Type: "section",
 		Text: &thirdParty.SlackMessageText{
 			Type: "mrkdwn",
-			Text: fmt.Sprintf("*CWPP Scan Result: %s*", result.ScanType),
+			Text: fmt.Sprintf("*CWPP Scan Start*:  %s\n", start.ScanGroupName),
 		},
 	})
 
@@ -41,14 +85,13 @@ func formatMessage(result *scan.Result) (sm thirdParty.SlackMessage) {
 		Type: "divider",
 	})
 
-	for _, vuln := range result.Vulnerabilities {
-		sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
-			Type: "section",
-			Text: &thirdParty.SlackMessageText{
-				Type: "mrkdwn",
-				Text: fmt.Sprintf("*CVE:* %s\n*Severity:* %s\n*Description:* %s", vuln.Cve, vuln.Severity, vuln.Description),
-			},
-		})
-	}
+	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+		Type: "section",
+		Text: &thirdParty.SlackMessageText{
+			Type: "mrkdwn",
+			Text: fmt.Sprintf("*Provider*: %s\n*User ID*: %s\n*Key Name*: %s\n", start.Provider, start.UserId, start.KeyName),
+		},
+	})
+
 	return
 }
