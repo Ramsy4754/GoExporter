@@ -35,7 +35,7 @@ func sendToJira(request *thirdParty.JiraRequest, payload thirdParty.JiraRequestB
 		return
 	}
 	defer func(Body io.ReadCloser) {
-		err := Body.Close()
+		err = Body.Close()
 		if err != nil {
 			logger.Print("failed to close response body:", err)
 			return

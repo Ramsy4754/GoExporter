@@ -1,10 +1,10 @@
 package thirdParty
 
 type JiraRequest struct {
-	InstanceUrl string
-	ApiKey      string
-	ProjectKey  string
-	UserName    string
+	InstanceUrl string `json:"instanceUrl"`
+	ApiKey      string `json:"apiKey"`
+	ProjectKey  string `json:"projectKey"`
+	UserName    string `json:"userName"`
 }
 
 type JiraRequestBody struct {

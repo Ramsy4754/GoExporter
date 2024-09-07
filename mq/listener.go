@@ -136,10 +136,18 @@ func Listen() {
 				}
 				break
 			case "git":
+				request := &thirdParty.GitRequest{
+					Repository: msg.Repository,
+					Token:      msg.Token,
+				}
 				switch msg.Event {
 				case "afterCwppScan":
+					result := getScanResultArgsFromMsg(msg)
+					export.SendCwppScanResultToGit(request, result)
 					break
 				case "beforeCwppScan":
+					start := getScanStartArgsFromMsg(msg)
+					export.SendCwppScanStartToGit(request, start)
 					break
 				default:
 					logger.Printf("unknown event: %s", msg.Event)

@@ -7,6 +7,8 @@ type Message struct {
 	ApiKey      string      `json:"apiKey"`
 	ProjectKey  string      `json:"projectKey"`
 	UserName    string      `json:"userName"`
+	Repository  string      `json:"repository"`
+	Token       string      `json:"token"`
 	Event       string      `json:"event"`
 	Args        interface{} `json:"args"`
 }
