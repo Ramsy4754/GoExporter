@@ -11,12 +11,12 @@ import (
 	"net/http"
 )
 
-func SendCwppScanStartToGithub(request *thirdParty.GitRequest, start *scan.StartInfo) {
+func SendCwppScanStartToGithub(request *thirdParty.GithubRequest, start *scan.StartInfo) {
 	issue := formatCwppScanStartGithubIssue(start)
 	sendToGithub(request, issue)
 }
 
-func sendToGithub(request *thirdParty.GitRequest, issue thirdParty.GitIssue) {
+func sendToGithub(request *thirdParty.GithubRequest, issue thirdParty.GithubIssue) {
 	payloadBytes, err := json.Marshal(issue)
 	logger := xLogger.GetLogger()
 	if err != nil {
@@ -48,7 +48,7 @@ func sendToGithub(request *thirdParty.GitRequest, issue thirdParty.GitIssue) {
 	logger.Printf("response Status: %s", resp.Status)
 }
 
-func formatCwppScanStartGithubIssue(start *scan.StartInfo) thirdParty.GitIssue {
+func formatCwppScanStartGithubIssue(start *scan.StartInfo) thirdParty.GithubIssue {
 	comment := fmt.Sprintf("## CWPP Scan Start: %s\n\n### User ID: %s\n**Provider:** %s\n**Scan Group Name:** %s\n**Key Name:** %s\n**Key Value:** %s\n\n",
 		start.ScanGroupName,
 		start.UserId,
@@ -57,19 +57,19 @@ func formatCwppScanStartGithubIssue(start *scan.StartInfo) thirdParty.GitIssue {
 		start.KeyName,
 	)
 
-	issue := thirdParty.GitIssue{
+	issue := thirdParty.GithubIssue{
 		Title: fmt.Sprintf("CWPP Scan Start: %s", start.ScanGroupName),
 		Body:  comment,
 	}
 	return issue
 }
 
-func SendCwppScanResultToGithub(request *thirdParty.GitRequest, result *scan.ResultInfo) {
+func SendCwppScanResultToGithub(request *thirdParty.GithubRequest, result *scan.ResultInfo) {
 	issue := formatCwppScanResultGithubIssue(result)
 	sendToGithub(request, issue)
 }
 
-func formatCwppScanResultGithubIssue(result *scan.ResultInfo) thirdParty.GitIssue {
+func formatCwppScanResultGithubIssue(result *scan.ResultInfo) thirdParty.GithubIssue {
 	summary := fmt.Sprintf(
 		"### Result Summary\n**Total:** %d\n**Critical:** %d\n**High:** %d\n**Medium:** %d\n**Low:** %d\n\n",
 		result.Total.Count,
@@ -95,7 +95,7 @@ func formatCwppScanResultGithubIssue(result *scan.ResultInfo) thirdParty.GitIssu
 		summary,
 	)
 
-	issue := thirdParty.GitIssue{
+	issue := thirdParty.GithubIssue{
 		Title: fmt.Sprintf("CWPP Scan Result: %s", result.ScanGroupName),
 		Body:  comment,
 	}

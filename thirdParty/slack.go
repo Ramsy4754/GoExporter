@@ -1,7 +1,7 @@
 package thirdParty
 
 type SlackRequest struct {
-	WebhookUrl string
+	WebhookUrl string `json:"webhookUrl"`
 }
 
 type SlackMessageText struct {

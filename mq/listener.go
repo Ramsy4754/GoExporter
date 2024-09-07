@@ -116,10 +116,18 @@ func Listen() {
 				}
 				break
 			case "teams":
+				request := &thirdParty.TeamsRequest{
+					WebhookUrl: msg.WebhookUrl,
+					TenantId:   msg.TenantId,
+				}
 				switch msg.Event {
 				case "afterCwppScan":
+					result := getScanResultArgsFromMsg(msg)
+					export.SendCwppScanResultToTeams(request, result)
 					break
 				case "beforeCwppScan":
+					start := getScanStartArgsFromMsg(msg)
+					export.SendCwppScanStartToTeams(request, start)
 					break
 				default:
 					logger.Printf("unknown event: %s", msg.Event)
@@ -135,8 +143,8 @@ func Listen() {
 					logger.Printf("unknown event: %s", msg.Event)
 				}
 				break
-			case "git":
-				request := &thirdParty.GitRequest{
+			case "github":
+				request := &thirdParty.GithubRequest{
 					Repository: msg.Repository,
 					Token:      msg.Token,
 				}

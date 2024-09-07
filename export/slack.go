@@ -11,13 +11,16 @@ import (
 )
 
 func SendCwppScanResultToSlack(request *thirdParty.SlackRequest, result *scan.ResultInfo) {
-	logger := xLogger.GetLogger()
-
 	payload := formatCwppScanResultSlackMessage(result)
+	sendToSlack(request, payload)
+}
+
+func sendToSlack(request *thirdParty.SlackRequest, payload thirdParty.SlackMessage) {
+	logger := xLogger.GetLogger()
 
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
-		fmt.Println("Error marshalling JSON:", err)
+		logger.Println("Error marshalling JSON:", err)
 		return
 	}
 
@@ -84,22 +87,8 @@ func formatCwppScanResultSlackMessage(result *scan.ResultInfo) (sm thirdParty.Sl
 }
 
 func SendCwppScanStartToSlack(request *thirdParty.SlackRequest, start *scan.StartInfo) {
-	logger := xLogger.GetLogger()
-
 	payload := formatCwppScanStartSlackMessage(start)
-
-	payloadBytes, err := json.Marshal(payload)
-	if err != nil {
-		logger.Println("error marshalling json:", err)
-		return
-	}
-
-	resp, err := http.Post(request.WebhookUrl, "application/json", bytes.NewBuffer(payloadBytes))
-	if err != nil {
-		logger.Print("failed to send message to slack", err)
-		return
-	}
-	logger.Print("response status:", resp.Status)
+	sendToSlack(request, payload)
 }
 
 func formatCwppScanStartSlackMessage(start *scan.StartInfo) (sm thirdParty.SlackMessage) {
