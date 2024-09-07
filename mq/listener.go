@@ -134,10 +134,20 @@ func Listen() {
 				}
 				break
 			case "wiki":
+				request := &thirdParty.WikiRequest{
+					InstanceUrl: msg.InstanceUrl,
+					UserName:    msg.UserName,
+					ApiKey:      msg.ApiKey,
+					SpaceKey:    msg.SpaceKey,
+				}
 				switch msg.Event {
 				case "afterCwppScan":
+					result := getScanResultArgsFromMsg(msg)
+					export.SendCwppScanResultToWiki(request, result)
 					break
 				case "beforeCwppScan":
+					start := getScanStartArgsFromMsg(msg)
+					export.SendCwppScanStartToWiki(request, start)
 					break
 				default:
 					logger.Printf("unknown event: %s", msg.Event)

@@ -10,6 +10,7 @@ type Message struct {
 	UserName    string      `json:"userName"`
 	Repository  string      `json:"repository"`
 	Token       string      `json:"token"`
+	SpaceKey    string      `json:"spaceKey"`
 	Event       string      `json:"event"`
 	Args        interface{} `json:"args"`
 }
