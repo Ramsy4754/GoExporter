@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-func SendCwppScanStartToGit(request *thirdParty.GitRequest, start *scan.StartInfo) {
+func SendCwppScanStartToGithub(request *thirdParty.GitRequest, start *scan.StartInfo) {
 	issue := formatCwppScanStartGithubIssue(start)
 	sendToGithub(request, issue)
 }
@@ -64,7 +64,7 @@ func formatCwppScanStartGithubIssue(start *scan.StartInfo) thirdParty.GitIssue {
 	return issue
 }
 
-func SendCwppScanResultToGit(request *thirdParty.GitRequest, result *scan.ResultInfo) {
+func SendCwppScanResultToGithub(request *thirdParty.GitRequest, result *scan.ResultInfo) {
 	issue := formatCwppScanResultGithubIssue(result)
 	sendToGithub(request, issue)
 }

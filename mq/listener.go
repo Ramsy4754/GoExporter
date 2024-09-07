@@ -143,11 +143,11 @@ func Listen() {
 				switch msg.Event {
 				case "afterCwppScan":
 					result := getScanResultArgsFromMsg(msg)
-					export.SendCwppScanResultToGit(request, result)
+					export.SendCwppScanResultToGithub(request, result)
 					break
 				case "beforeCwppScan":
 					start := getScanStartArgsFromMsg(msg)
-					export.SendCwppScanStartToGit(request, start)
+					export.SendCwppScanStartToGithub(request, start)
 					break
 				default:
 					logger.Printf("unknown event: %s", msg.Event)
