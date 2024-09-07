@@ -6,9 +6,26 @@ type Vulnerability struct {
 	Description string `json:"description"`
 }
 
-type Result struct {
-	ScanType        string          `json:"scanType"`
-	Vulnerabilities []Vulnerability `json:"vulnerabilities"`
+type ResultInfo struct {
+	Provider      string `json:"provider"`
+	UserId        string `json:"userId"`
+	ScanGroupName string `json:"scanGroupName"`
+	KeyName       string `json:"keyName"`
+	EventTime     string `json:"eventTIme"`
+	ResultSummary `json:"summary"`
+}
+
+type ResultSummary struct {
+	Total    ResultSummaryData `json:"total"`
+	Critical ResultSummaryData `json:"critical"`
+	High     ResultSummaryData `json:"high"`
+	Medium   ResultSummaryData `json:"medium"`
+	Low      ResultSummaryData `json:"low"`
+}
+
+type ResultSummaryData struct {
+	Count      int    `json:"count"`
+	Percentage string `json:"percentage"`
 }
 
 type StartInfo struct {
@@ -16,4 +33,5 @@ type StartInfo struct {
 	UserId        string `json:"userId"`
 	ScanGroupName string `json:"scanGroupName"`
 	KeyName       string `json:"keyName"`
+	EventTime     string `json:"eventTIme"`
 }

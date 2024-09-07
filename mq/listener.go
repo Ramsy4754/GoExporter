@@ -86,9 +86,47 @@ func Listen() {
 						WebhookUrl: msg.WebhookUrl,
 					}
 
-					result := &scan.Result{
-						ScanType:        "",
-						Vulnerabilities: nil,
+					args := msg.Args.(map[string]interface{})
+					provider := args["provider"].(string)
+					userId := args["userId"].(string)
+					scanGroupName := args["scanGroupName"].(string)
+					keyName := args["keyName"].(string)
+					eventTime := args["eventTime"].(string)
+					summary := args["summary"].(map[string]interface{})
+
+					total := summary["total"].(map[string]interface{})
+					critical := summary["critical"].(map[string]interface{})
+					high := summary["high"].(map[string]interface{})
+					medium := summary["medium"].(map[string]interface{})
+					low := summary["low"].(map[string]interface{})
+					result := &scan.ResultInfo{
+						Provider:      provider,
+						UserId:        userId,
+						ScanGroupName: scanGroupName,
+						KeyName:       keyName,
+						EventTime:     eventTime,
+						ResultSummary: scan.ResultSummary{
+							Total: scan.ResultSummaryData{
+								Count:      total["count"].(int),
+								Percentage: total["percentage"].(string),
+							},
+							Critical: scan.ResultSummaryData{
+								Count:      critical["count"].(int),
+								Percentage: critical["percentage"].(string),
+							},
+							High: scan.ResultSummaryData{
+								Count:      high["count"].(int),
+								Percentage: high["percentage"].(string),
+							},
+							Medium: scan.ResultSummaryData{
+								Count:      medium["count"].(int),
+								Percentage: medium["percentage"].(string),
+							},
+							Low: scan.ResultSummaryData{
+								Count:      low["count"].(int),
+								Percentage: low["percentage"].(string),
+							},
+						},
 					}
 					export.SendCwppScanResultToSlack(request, result)
 					break
@@ -102,11 +140,14 @@ func Listen() {
 					userId := args["userId"].(string)
 					scanGroupName := args["scanGroupName"].(string)
 					keyName := args["keyName"].(string)
+					eventTime := args["eventTime"].(string)
+
 					start := &scan.StartInfo{
 						Provider:      provider,
 						UserId:        userId,
 						ScanGroupName: scanGroupName,
 						KeyName:       keyName,
+						EventTime:     eventTime,
 					}
 
 					export.SendCwppScanStartToSlack(request, start)

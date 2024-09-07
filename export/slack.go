@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func SendCwppScanResultToSlack(request *thirdParty.SlackRequest, result *scan.Result) {
+func SendCwppScanResultToSlack(request *thirdParty.SlackRequest, result *scan.ResultInfo) {
 	logger := xLogger.GetLogger()
 
 	payload := formatCwppScanResultMessage(result)
@@ -28,28 +28,58 @@ func SendCwppScanResultToSlack(request *thirdParty.SlackRequest, result *scan.Re
 	logger.Print("response status:", resp.Status)
 }
 
-func formatCwppScanResultMessage(result *scan.Result) (sm thirdParty.SlackMessage) {
-	//sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
-	//	Type: "section",
-	//	Text: &thirdParty.SlackMessageText{
-	//		Type: "mrkdwn",
-	//		Text: fmt.Sprintf("*CWPP Scan Result: %s*", result.ScanType),
-	//	},
-	//})
-	//
-	//sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
-	//	Type: "divider",
-	//})
-	//
-	//for _, vuln := range result.Vulnerabilities {
-	//	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
-	//		Type: "section",
-	//		Text: &thirdParty.SlackMessageText{
-	//			Type: "mrkdwn",
-	//			Text: fmt.Sprintf("*CVE:* %s\n*Severity:* %s\n*Description:* %s", vuln.Cve, vuln.Severity, vuln.Description),
-	//		},
-	//	})
-	//}
+func formatCwppScanResultMessage(result *scan.ResultInfo) (sm thirdParty.SlackMessage) {
+	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+		Type: "section",
+		Text: &thirdParty.SlackMessageText{
+			Type: "mrkdwn",
+			Text: fmt.Sprintf("*CWPP Scan Start*:  %s\n", result.ScanGroupName),
+		},
+	})
+	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+		Type: "section",
+		Text: &thirdParty.SlackMessageText{
+			Type: "mrkdwn",
+			Text: fmt.Sprintf("*Event Time(UTC)*:  %s\n", result.EventTime),
+		},
+	})
+
+	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+		Type: "divider",
+	})
+
+	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+		Type: "section",
+		Text: &thirdParty.SlackMessageText{
+			Type: "mrkdwn",
+			Text: fmt.Sprintf("*Provider*: %s\n*User ID*: %s\n*Key Name*: %s\n", result.Provider, result.UserId, result.KeyName),
+		},
+	})
+
+	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+		Type: "divider",
+	})
+
+	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+		Type: "section",
+		Text: &thirdParty.SlackMessageText{
+			Type: "mrkdwn",
+			Text: fmt.Sprintf(
+				"*Total*: %d(%s)\n*Critical*: %d(%s)\n*High*: %d(%s)\n*Medium*: %d(%s)\n*Low*: %d(%s)\n",
+				result.Total.Count,
+				result.Total.Percentage,
+				result.Critical.Count,
+				result.Critical.Percentage,
+				result.High.Count,
+				result.High.Percentage,
+				result.Medium.Count,
+				result.Medium.Percentage,
+				result.Low.Count,
+				result.Low.Percentage,
+			),
+		},
+	})
+
 	return
 }
 
@@ -78,6 +108,13 @@ func formatCwppScanStartMessage(start *scan.StartInfo) (sm thirdParty.SlackMessa
 		Text: &thirdParty.SlackMessageText{
 			Type: "mrkdwn",
 			Text: fmt.Sprintf("*CWPP Scan Start*:  %s\n", start.ScanGroupName),
+		},
+	})
+	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
+		Type: "section",
+		Text: &thirdParty.SlackMessageText{
+			Type: "mrkdwn",
+			Text: fmt.Sprintf("*Event Time(UTC)*:  %s\n", start.EventTime),
 		},
 	})
 
