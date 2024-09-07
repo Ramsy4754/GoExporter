@@ -53,3 +53,19 @@ batch.bat
     }
 }
 ```
+```
+{
+    "application": "jira",
+    "instanceUrl": "<INSTANCE_URL>",
+    "apiKey": "<API_KEY>",
+    "projectKey": "<PROJECT_KEY>",
+    "event": "beforeCwppScan",
+    "args": {
+        "provider": "<provider>",
+        "userId": "<userId>",
+        "scanGroupName": "<scanGroupName>",
+        "keyName": "<keyName>",
+        "eventTime": "<eventTime>"
+    }
+}
+```

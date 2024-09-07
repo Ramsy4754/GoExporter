@@ -13,7 +13,7 @@ import (
 func SendCwppScanResultToSlack(request *thirdParty.SlackRequest, result *scan.ResultInfo) {
 	logger := xLogger.GetLogger()
 
-	payload := formatCwppScanResultMessage(result)
+	payload := formatCwppScanResultSlackMessage(result)
 
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
@@ -28,12 +28,12 @@ func SendCwppScanResultToSlack(request *thirdParty.SlackRequest, result *scan.Re
 	logger.Print("response status:", resp.Status)
 }
 
-func formatCwppScanResultMessage(result *scan.ResultInfo) (sm thirdParty.SlackMessage) {
+func formatCwppScanResultSlackMessage(result *scan.ResultInfo) (sm thirdParty.SlackMessage) {
 	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
 		Type: "section",
 		Text: &thirdParty.SlackMessageText{
 			Type: "mrkdwn",
-			Text: fmt.Sprintf("*CWPP Scan Start*:  %s\n", result.ScanGroupName),
+			Text: fmt.Sprintf("*CWPP Scan Result*:  %s\n", result.ScanGroupName),
 		},
 	})
 	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
@@ -86,7 +86,7 @@ func formatCwppScanResultMessage(result *scan.ResultInfo) (sm thirdParty.SlackMe
 func SendCwppScanStartToSlack(request *thirdParty.SlackRequest, start *scan.StartInfo) {
 	logger := xLogger.GetLogger()
 
-	payload := formatCwppScanStartMessage(start)
+	payload := formatCwppScanStartSlackMessage(start)
 
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
@@ -102,7 +102,7 @@ func SendCwppScanStartToSlack(request *thirdParty.SlackRequest, start *scan.Star
 	logger.Print("response status:", resp.Status)
 }
 
-func formatCwppScanStartMessage(start *scan.StartInfo) (sm thirdParty.SlackMessage) {
+func formatCwppScanStartSlackMessage(start *scan.StartInfo) (sm thirdParty.SlackMessage) {
 	sm.Blocks = append(sm.Blocks, &thirdParty.SlackMessageBlock{
 		Type: "section",
 		Text: &thirdParty.SlackMessageText{
