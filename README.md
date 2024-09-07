@@ -11,6 +11,10 @@ batch.bat
     "webhookUrl": "<SLACK_WEBHOOK_URL>",
     "event": "afterCwppScan",
     "args": {
+        "provider": "<provider>",
+        "userId": "<userId>",
+        "scanGroupName": "<scanGroupName>",
+        "keyName": "<keyName>", 
         "summary": {
             "total": {
                 "count": 72,
@@ -44,7 +48,8 @@ batch.bat
         "provider": "<provider>",
         "userId": "<userId>",
         "scanGroupName": "<scanGroupName>",
-        "keyName": "<keyName>"
+        "keyName": "<keyName>",
+        "eventTime": "<eventTime>"
     }
 }
 ```
