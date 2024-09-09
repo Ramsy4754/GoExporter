@@ -155,8 +155,9 @@ func Listen() {
 				break
 			case "github":
 				request := &thirdParty.GithubRequest{
-					Repository: msg.Repository,
+					ApiUrl:     msg.ApiUrl,
 					Token:      msg.Token,
+					Repository: msg.Repository,
 				}
 				switch msg.Event {
 				case "afterCwppScan":
@@ -166,6 +167,25 @@ func Listen() {
 				case "beforeCwppScan":
 					start := getScanStartArgsFromMsg(msg)
 					export.SendCwppScanStartToGithub(request, start)
+					break
+				default:
+					logger.Printf("unknown event: %s", msg.Event)
+				}
+				break
+			case "gitlab":
+				request := &thirdParty.GitlabRequest{
+					ApiUrl:    msg.ApiUrl,
+					Token:     msg.Token,
+					ProjectId: msg.ProjectId,
+				}
+				switch msg.Event {
+				case "afterCwppScan":
+					result := getScanResultArgsFromMsg(msg)
+					export.SendCwppScanResultToGitlab(request, result)
+					break
+				case "beforeCwppScan":
+					start := getScanStartArgsFromMsg(msg)
+					export.SendCwppScanStartToGitlab(request, start)
 					break
 				default:
 					logger.Printf("unknown event: %s", msg.Event)

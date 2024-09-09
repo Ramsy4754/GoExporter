@@ -17,8 +17,9 @@ func SendCwppScanStartToGithub(request *thirdParty.GithubRequest, start *scan.St
 }
 
 func sendToGithub(request *thirdParty.GithubRequest, issue thirdParty.GithubIssue) {
-	payloadBytes, err := json.Marshal(issue)
 	logger := xLogger.GetLogger()
+
+	payloadBytes, err := json.Marshal(issue)
 	if err != nil {
 		logger.Printf("failed to marshal issue: %v", err)
 		return
