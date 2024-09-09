@@ -1,7 +1,19 @@
 # Build Project
 
+Windows
+
 ```
 batch.bat
+```
+
+Linux
+
+```
+export GOARCH=arm64
+export GOOS=linux
+export CC=aarch64-linux-gnu-gcc
+export CGO_ENABLED=1
+go build -o go_exporter
 ```
 
 # Rabbit MQ Install
