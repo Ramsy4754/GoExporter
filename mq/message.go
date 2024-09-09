@@ -11,7 +11,6 @@ type Message struct {
 	Repository  string      `json:"repository"`
 	Token       string      `json:"token"`
 	SpaceKey    string      `json:"spaceKey"`
-	ApiUrl      string      `json:"apiUrl"`
 	ProjectId   string      `json:"projectId"`
 	Event       string      `json:"event"`
 	Args        interface{} `json:"args"`

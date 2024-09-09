@@ -25,7 +25,7 @@ func sendToGithub(request *thirdParty.GithubRequest, issue thirdParty.GithubIssu
 		return
 	}
 
-	requestUrl := fmt.Sprintf("%s/projects/%s/issues", request.ApiUrl, request.Repository)
+	requestUrl := fmt.Sprintf("https://api.github.com/repos/%s/issues", request.Repository)
 	req, err := http.NewRequest("POST", requestUrl, bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		logger.Print("failed to create request: ", err)

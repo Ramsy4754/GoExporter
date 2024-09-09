@@ -1,7 +1,6 @@
 package thirdParty
 
 type GithubRequest struct {
-	ApiUrl     string `json:"apiUrl"`
 	Token      string `json:"token"`
 	Repository string `json:"repository"`
 }

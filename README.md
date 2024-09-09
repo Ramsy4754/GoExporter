@@ -1,6 +1,15 @@
 # Build Project
+
 ```
 batch.bat
+```
+
+# Rabbit MQ Install
+
+```
+sudo apt-get install rabbitmq-server
+sudo systemctl enable rabbitmq-server
+sudo systemctl start rabbitmq-server.service
 ```
 
 # Message Format
@@ -53,6 +62,7 @@ batch.bat
     }
 }
 ```
+
 ```
 {
     "application": "jira",
@@ -66,6 +76,39 @@ batch.bat
         "scanGroupName": "<scanGroupName>",
         "keyName": "<keyName>",
         "eventTime": "<eventTime>"
+    }
+}
+```
+
+```
+{
+    "application": "github",
+    "event": "beforeCwppScan",
+    "token": "<GITHUB_PERSONAL_ACCESS_TOKEN>",
+    "repository": "<ACCOUNT/REPO>",
+    "args": {
+        "provider": "aws",
+        "userId": "ramsy4754",
+        "scanGroupName": "cwpp scan group 01",
+        "keyName": "cwpp key 01",
+        "eventTime": "2024-09-09 15:23:13",
+    }
+}
+```
+
+```
+{
+    "application": "gitlab",
+    "event": "beforeCwppScan",
+    "projectId": "<GITLAB_PROJECT_ID>",
+    "token": "<GITLAB_PERSONAL_ACCESS_TOKEN>",
+    "repository": "<GROUP/REPO>",
+    "args": {
+        "provider": "aws",
+        "userId": "ramsy4754",
+        "scanGroupName": "cwpp scan group 01",
+        "keyName": "cwpp key 01",
+        "eventTime": "2024-09-09 15:23:13",
     }
 }
 ```

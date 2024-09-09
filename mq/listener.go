@@ -78,6 +78,8 @@ func Listen() {
 				continue
 			}
 
+			logger.Printf("received message \n%+v", msg)
+
 			switch msg.Application {
 			case "slack":
 				request := &thirdParty.SlackRequest{
@@ -155,7 +157,6 @@ func Listen() {
 				break
 			case "github":
 				request := &thirdParty.GithubRequest{
-					ApiUrl:     msg.ApiUrl,
 					Token:      msg.Token,
 					Repository: msg.Repository,
 				}
@@ -174,7 +175,6 @@ func Listen() {
 				break
 			case "gitlab":
 				request := &thirdParty.GitlabRequest{
-					ApiUrl:    msg.ApiUrl,
 					Token:     msg.Token,
 					ProjectId: msg.ProjectId,
 				}

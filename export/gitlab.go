@@ -60,12 +60,13 @@ func sendToGitlab(request *thirdParty.GitlabRequest, issue thirdParty.GitlabIssu
 		return
 	}
 
-	requestUrl := fmt.Sprintf("%s/projects/%s/issues", request.ApiUrl, request.ProjectId)
+	requestUrl := fmt.Sprintf("https://gitlab.com/api/v4/projects/%s/issues", request.ProjectId)
 	req, err := http.NewRequest("POST", requestUrl, bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		logger.Print("failed to create request: ", err)
 		return
 	}
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("PRIVATE-TOKEN", request.Token)
 
 	client := &http.Client{}
