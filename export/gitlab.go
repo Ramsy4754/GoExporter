@@ -30,13 +30,11 @@ func formatCwppScanResultGitlabIssue(result *scan.ResultInfo) (gi thirdParty.Git
 		"## CWPP Scan Result: %s\n\n"+
 			"### User ID: %s\n"+
 			"**Provider:** %s\n"+
-			"**Scan Group Name:** %s\n"+
 			"**Key Name:** %s\n"+
 			"**Event Time:** %s\n\n%s",
 		result.ScanGroupName,
 		result.UserId,
 		result.Provider,
-		result.ScanGroupName,
 		result.KeyName,
 		result.EventTime,
 		summary,
@@ -88,12 +86,12 @@ func sendToGitlab(request *thirdParty.GitlabRequest, issue thirdParty.GitlabIssu
 
 func formatCwppScanStartGitlabIssue(start *scan.StartInfo) (gi thirdParty.GitlabIssue) {
 	gi.Title = fmt.Sprintf("CWPP Scan Start: %s", start.ScanGroupName)
-	comment := fmt.Sprintf("## CWPP Scan Start: %s\n\n### User ID: %s\n**Provider:** %s\n**Scan Group Name:** %s\n**Key Name:** %s\n**Key Value:** %s\n\n",
+	comment := fmt.Sprintf("## CWPP Scan Start: %s\n\n### User ID: %s\n**Provider:** %s\n**Key Name:** %s\n**Event Time**: %s\n\n",
 		start.ScanGroupName,
 		start.UserId,
 		start.Provider,
-		start.ScanGroupName,
 		start.KeyName,
+		start.EventTime,
 	)
 	gi.Description = comment
 	return

@@ -50,12 +50,12 @@ func sendToGithub(request *thirdParty.GithubRequest, issue thirdParty.GithubIssu
 }
 
 func formatCwppScanStartGithubIssue(start *scan.StartInfo) thirdParty.GithubIssue {
-	comment := fmt.Sprintf("## CWPP Scan Start: %s\n\n### User ID: %s\n**Provider:** %s\n**Scan Group Name:** %s\n**Key Name:** %s\n**Key Value:** %s\n\n",
+	comment := fmt.Sprintf("## CWPP Scan Start: %s\n\n### User ID: %s\n**Provider:** %s\n**Key Name:** %s\n**Event Time**: %s\n\n",
 		start.ScanGroupName,
 		start.UserId,
 		start.Provider,
-		start.ScanGroupName,
 		start.KeyName,
+		start.EventTime,
 	)
 
 	issue := thirdParty.GithubIssue{
@@ -84,13 +84,11 @@ func formatCwppScanResultGithubIssue(result *scan.ResultInfo) thirdParty.GithubI
 		"## CWPP Scan Result: %s\n\n"+
 			"### User ID: %s\n"+
 			"**Provider:** %s\n"+
-			"**Scan Group Name:** %s\n"+
 			"**Key Name:** %s\n"+
 			"**Event Time:** %s\n\n%s",
 		result.ScanGroupName,
 		result.UserId,
 		result.Provider,
-		result.ScanGroupName,
 		result.KeyName,
 		result.EventTime,
 		summary,

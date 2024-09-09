@@ -6,20 +6,32 @@ type TeamsRequest struct {
 }
 
 type TeamsMessage struct {
-	Type       string         `json:"@type"`
-	Context    string         `json:"context"`
-	ThemeColor string         `json:"themeColor"`
-	Summary    string         `json:"summary"`
-	Sections   []TeamsSection `json:"sections"`
+	Type        string            `json:"type"`
+	Attachments []TeamsAttachment `json:"attachments"`
 }
 
-type TeamsSection struct {
-	ActivityTitle string      `json:"activityTitle"`
-	Facts         []TeamsFact `json:"facts"`
-	Markdown      bool        `json:"markdown"`
+type TeamsAttachment struct {
+	ContentType string       `json:"contentType"`
+	Content     TeamsContent `json:"content"`
+}
+
+type TeamsContent struct {
+	Type    string             `json:"type"`
+	Version string             `json:"version"`
+	Schema  string             `json:"@schema"`
+	Body    []TeamsContentBody `json:"body"`
+	Actions []string           `json:"actions"`
+}
+
+type TeamsContentBody struct {
+	Type   string      `json:"type"`
+	Size   string      `json:"size"`
+	Weight string      `json:"weight"`
+	Text   string      `json:"text"`
+	Facts  []TeamsFact `json:"facts"`
 }
 
 type TeamsFact struct {
-	Name  string `json:"name"`
+	Title string `json:"title"`
 	Value string `json:"value"`
 }

@@ -16,53 +16,72 @@ func SendCwppScanResultToTeams(request *thirdParty.TeamsRequest, result *scan.Re
 }
 
 func formatCwppScanResultTeamsMessage(result *scan.ResultInfo) *thirdParty.TeamsMessage {
-	tm := new(thirdParty.TeamsMessage)
-
-	tm.Type = "MessageCard"
-	tm.Context = "http://schema.org/extensions"
-	tm.ThemeColor = "0076D7"
-	tm.Summary = fmt.Sprintf("CWPP Scan Result: %s", result.ScanGroupName)
-
-	facts := make([]thirdParty.TeamsFact, 0)
-	facts = append(facts, thirdParty.TeamsFact{
-		Name:  "User ID",
-		Value: result.UserId,
-	})
-	facts = append(facts, thirdParty.TeamsFact{
-		Name:  "Provider",
-		Value: result.Provider,
-	})
-	facts = append(facts, thirdParty.TeamsFact{
-		Name:  "Key Name",
-		Value: result.KeyName,
-	})
-	facts = append(facts, thirdParty.TeamsFact{
-		Name:  "Event Time",
-		Value: result.EventTime,
-	})
-
-	summary := fmt.Sprintf("Total: %d(%s)\nCritical: %d(%s)\nHigh: %d(%s)\nMedium: %d(%s)\nLow: %d(%s)",
-		result.Total.Count,
-		result.Total.Percentage,
-		result.Critical.Count,
-		result.Critical.Percentage,
-		result.High.Count,
-		result.High.Percentage,
-		result.Medium.Count,
-		result.Medium.Percentage,
-		result.Low.Count,
-		result.Low.Percentage,
-	)
-	facts = append(facts, thirdParty.TeamsFact{
-		Name:  "Summary",
-		Value: summary,
-	})
-	section := thirdParty.TeamsSection{
-		ActivityTitle: fmt.Sprintf("CWPP Scan Start: %s", result.ScanGroupName),
-		Facts:         facts,
-		Markdown:      true,
+	tm := &thirdParty.TeamsMessage{
+		Type:        "message",
+		Attachments: make([]thirdParty.TeamsAttachment, 1),
 	}
-	tm.Sections = append(tm.Sections, section)
+
+	tm.Attachments[0].ContentType = "application/vnd.microsoft.card.adaptive"
+	tm.Attachments[0].Content = thirdParty.TeamsContent{
+		Type:    "AdaptiveCard",
+		Version: "1.2",
+		Schema:  "http://adaptivecards.io/schemas/adaptive-card.json",
+		Body:    nil,
+		Actions: []string{},
+	}
+
+	var body []thirdParty.TeamsContentBody
+	body = append(body, thirdParty.TeamsContentBody{
+		Type:   "TextBlock",
+		Size:   "Medium",
+		Weight: "Bolder",
+		Text:   fmt.Sprintf("CWPP Scan Result: %s", result.ScanGroupName),
+	})
+	body = append(body, thirdParty.TeamsContentBody{
+		Type: "FactSet",
+		Facts: []thirdParty.TeamsFact{
+			{
+				Title: "Scan Group Name",
+				Value: result.ScanGroupName,
+			},
+		},
+	})
+
+	summary := fmt.Sprintf(
+		"Result Summary\nTotal: %d\nCritical: %d\nHigh: %d\nMedium: %d\nLow: %d\n\n",
+		result.Total.Count,
+		result.Critical.Count,
+		result.High.Count,
+		result.Medium.Count,
+		result.Low.Count,
+	)
+
+	body = append(body, thirdParty.TeamsContentBody{
+		Type: "FactSet",
+		Facts: []thirdParty.TeamsFact{
+			{
+				Title: "User ID",
+				Value: result.UserId,
+			},
+			{
+				Title: "Provider",
+				Value: result.Provider,
+			},
+			{
+				Title: "Key Name",
+				Value: result.KeyName,
+			},
+			{
+				Title: "Event Time",
+				Value: result.EventTime,
+			},
+			{
+				Title: "Summary",
+				Value: summary,
+			},
+		},
+	})
+
 	return tm
 }
 
@@ -88,36 +107,57 @@ func sendToTeams(request *thirdParty.TeamsRequest, payload *thirdParty.TeamsMess
 }
 
 func formatCwppScanStartTeamsMessage(start *scan.StartInfo) *thirdParty.TeamsMessage {
-	tm := new(thirdParty.TeamsMessage)
-
-	tm.Type = "MessageCard"
-	tm.Context = "http://schema.org/extensions"
-	tm.ThemeColor = "0076D7"
-	tm.Summary = fmt.Sprintf("CWPP Scan Start: %s", start.ScanGroupName)
-
-	facts := make([]thirdParty.TeamsFact, 0)
-	facts = append(facts, thirdParty.TeamsFact{
-		Name:  "User ID",
-		Value: start.UserId,
-	})
-	facts = append(facts, thirdParty.TeamsFact{
-		Name:  "Provider",
-		Value: start.Provider,
-	})
-	facts = append(facts, thirdParty.TeamsFact{
-		Name:  "Key Name",
-		Value: start.KeyName,
-	})
-	facts = append(facts, thirdParty.TeamsFact{
-		Name:  "Event Time",
-		Value: start.EventTime,
-	})
-	section := thirdParty.TeamsSection{
-		ActivityTitle: fmt.Sprintf("CWPP Scan Start: %s", start.ScanGroupName),
-		Facts:         facts,
-		Markdown:      true,
+	tm := &thirdParty.TeamsMessage{
+		Type:        "message",
+		Attachments: make([]thirdParty.TeamsAttachment, 1),
 	}
-	tm.Sections = append(tm.Sections, section)
+
+	tm.Attachments[0].ContentType = "application/vnd.microsoft.card.adaptive"
+	tm.Attachments[0].Content = thirdParty.TeamsContent{
+		Type:    "AdaptiveCard",
+		Version: "1.2",
+		Schema:  "http://adaptivecards.io/schemas/adaptive-card.json",
+		Body:    nil,
+		Actions: []string{},
+	}
+
+	var body []thirdParty.TeamsContentBody
+	body = append(body, thirdParty.TeamsContentBody{
+		Type:   "TextBlock",
+		Size:   "Medium",
+		Weight: "Bolder",
+		Text:   fmt.Sprintf("CWPP Scan Start: %s", start.ScanGroupName),
+	})
+	body = append(body, thirdParty.TeamsContentBody{
+		Type: "FactSet",
+		Facts: []thirdParty.TeamsFact{
+			{
+				Title: "Scan Group Name",
+				Value: start.ScanGroupName,
+			},
+		},
+	})
+	body = append(body, thirdParty.TeamsContentBody{
+		Type: "FactSet",
+		Facts: []thirdParty.TeamsFact{
+			{
+				Title: "User ID",
+				Value: start.UserId,
+			},
+			{
+				Title: "Provider",
+				Value: start.Provider,
+			},
+			{
+				Title: "Key Name",
+				Value: start.KeyName,
+			},
+			{
+				Title: "Event Time",
+				Value: start.EventTime,
+			},
+		},
+	})
 
 	return tm
 }
