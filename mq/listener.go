@@ -139,7 +139,7 @@ func Listen() {
 				request := &thirdParty.WikiRequest{
 					InstanceUrl: msg.InstanceUrl,
 					UserName:    msg.UserName,
-					ApiKey:      msg.ApiKey,
+					Token:       msg.Token,
 					SpaceKey:    msg.SpaceKey,
 				}
 				switch msg.Event {
@@ -241,23 +241,23 @@ func getScanResultArgsFromMsg(msg Message) *scan.ResultInfo {
 		EventTime:     eventTime,
 		ResultSummary: scan.ResultSummary{
 			Total: scan.ResultSummaryData{
-				Count:      total["count"].(int),
+				Count:      int(total["count"].(float64)),
 				Percentage: total["percentage"].(string),
 			},
 			Critical: scan.ResultSummaryData{
-				Count:      critical["count"].(int),
+				Count:      int(critical["count"].(float64)),
 				Percentage: critical["percentage"].(string),
 			},
 			High: scan.ResultSummaryData{
-				Count:      high["count"].(int),
+				Count:      int(high["count"].(float64)),
 				Percentage: high["percentage"].(string),
 			},
 			Medium: scan.ResultSummaryData{
-				Count:      medium["count"].(int),
+				Count:      int(medium["count"].(float64)),
 				Percentage: medium["percentage"].(string),
 			},
 			Low: scan.ResultSummaryData{
-				Count:      low["count"].(int),
+				Count:      int(low["count"].(float64)),
 				Percentage: low["percentage"].(string),
 			},
 		},

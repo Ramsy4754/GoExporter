@@ -3,7 +3,7 @@ package thirdParty
 type WikiRequest struct {
 	InstanceUrl string `json:"instanceUrl"`
 	UserName    string `json:"userName"`
-	ApiKey      string `json:"apiKey"`
+	Token       string `json:"token"`
 	SpaceKey    string `json:"spaceKey"`
 }
 

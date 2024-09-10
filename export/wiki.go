@@ -5,7 +5,6 @@ import (
 	"GoExporter/thirdParty"
 	"GoExporter/xLogger"
 	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -31,9 +30,7 @@ func sendToWiki(request *thirdParty.WikiRequest, payload *thirdParty.WikiPage) {
 		return
 	}
 	req.Header.Set("Content-Type", "application/json")
-	auth := request.UserName + ":" + request.ApiKey
-	encodedAuth := base64.StdEncoding.EncodeToString([]byte(auth))
-	req.Header.Set("Authorization", "Basic "+encodedAuth)
+	req.SetBasicAuth(request.UserName, request.Token)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -51,7 +48,7 @@ func sendToWiki(request *thirdParty.WikiRequest, payload *thirdParty.WikiPage) {
 }
 
 func formatCwppScanStartWikiPage(request *thirdParty.WikiRequest, start *scan.StartInfo) (wp *thirdParty.WikiPage) {
-	content := fmt.Sprintf("h1. CWPP Scan Start: %s\n\nh2. User ID: %s\n*Provider: %s\n*Key Name: %s\n*Event Time: %s\n\n",
+	content := fmt.Sprintf("<h1>CWPP Scan Start: %s</h1>\n\n<h2>User ID: %s</h2>\n<p><strong>Provider</strong>: %s</p>\n<p><strong>Key Name</strong>: %s</p>\n<p><strong>Event Time</strong>: %s</p>\n\n",
 		start.ScanGroupName,
 		start.UserId,
 		start.Provider,
@@ -65,7 +62,7 @@ func formatCwppScanStartWikiPage(request *thirdParty.WikiRequest, start *scan.St
 	wp.Body = thirdParty.WikiPageBody{
 		Storage: thirdParty.WikiPageBodyStorage{
 			Value:          content,
-			Representation: "wiki",
+			Representation: "storage",
 		},
 	}
 	return
