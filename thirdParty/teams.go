@@ -13,6 +13,7 @@ type TeamsMessage struct {
 type TeamsAttachment struct {
 	ContentType string       `json:"contentType"`
 	Content     TeamsContent `json:"content"`
+	ContentUrl  *string      `json:"contentUrl"`
 }
 
 type TeamsContent struct {
@@ -20,7 +21,6 @@ type TeamsContent struct {
 	Version string             `json:"version"`
 	Schema  string             `json:"@schema"`
 	Body    []TeamsContentBody `json:"body"`
-	Actions []string           `json:"actions"`
 }
 
 type TeamsContentBody struct {

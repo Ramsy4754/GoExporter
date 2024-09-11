@@ -26,18 +26,17 @@ func formatCwppScanResultTeamsMessage(result *scan.ResultInfo) *thirdParty.Teams
 		Type:    "AdaptiveCard",
 		Version: "1.2",
 		Schema:  "http://adaptivecards.io/schemas/adaptive-card.json",
-		Body:    nil,
-		Actions: []string{},
+		Body:    []thirdParty.TeamsContentBody{},
 	}
 
-	var body []thirdParty.TeamsContentBody
-	body = append(body, thirdParty.TeamsContentBody{
+	body := &tm.Attachments[0].Content.Body
+	*body = append(*body, thirdParty.TeamsContentBody{
 		Type:   "TextBlock",
 		Size:   "Medium",
 		Weight: "Bolder",
 		Text:   fmt.Sprintf("CWPP Scan Result: %s", result.ScanGroupName),
 	})
-	body = append(body, thirdParty.TeamsContentBody{
+	*body = append(*body, thirdParty.TeamsContentBody{
 		Type: "FactSet",
 		Facts: []thirdParty.TeamsFact{
 			{
@@ -56,7 +55,7 @@ func formatCwppScanResultTeamsMessage(result *scan.ResultInfo) *thirdParty.Teams
 		result.Low.Count,
 	)
 
-	body = append(body, thirdParty.TeamsContentBody{
+	*body = append(*body, thirdParty.TeamsContentBody{
 		Type: "FactSet",
 		Facts: []thirdParty.TeamsFact{
 			{
@@ -117,18 +116,17 @@ func formatCwppScanStartTeamsMessage(start *scan.StartInfo) *thirdParty.TeamsMes
 		Type:    "AdaptiveCard",
 		Version: "1.2",
 		Schema:  "http://adaptivecards.io/schemas/adaptive-card.json",
-		Body:    nil,
-		Actions: []string{},
+		Body:    []thirdParty.TeamsContentBody{},
 	}
 
-	var body []thirdParty.TeamsContentBody
-	body = append(body, thirdParty.TeamsContentBody{
+	body := &tm.Attachments[0].Content.Body
+	*body = append(*body, thirdParty.TeamsContentBody{
 		Type:   "TextBlock",
 		Size:   "Medium",
 		Weight: "Bolder",
 		Text:   fmt.Sprintf("CWPP Scan Start: %s", start.ScanGroupName),
 	})
-	body = append(body, thirdParty.TeamsContentBody{
+	*body = append(*body, thirdParty.TeamsContentBody{
 		Type: "FactSet",
 		Facts: []thirdParty.TeamsFact{
 			{
@@ -137,7 +135,7 @@ func formatCwppScanStartTeamsMessage(start *scan.StartInfo) *thirdParty.TeamsMes
 			},
 		},
 	})
-	body = append(body, thirdParty.TeamsContentBody{
+	*body = append(*body, thirdParty.TeamsContentBody{
 		Type: "FactSet",
 		Facts: []thirdParty.TeamsFact{
 			{

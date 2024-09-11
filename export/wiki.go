@@ -74,6 +74,8 @@ func SendCwppScanResultToWiki(request *thirdParty.WikiRequest, result *scan.Resu
 }
 
 func formatCwppScanResultWikiPage(request *thirdParty.WikiRequest, result *scan.ResultInfo) (wp *thirdParty.WikiPage) {
+	wp = new(thirdParty.WikiPage)
+
 	summary := fmt.Sprintf("h2. Summary\n*Total: %d(%s)\nCritical: %d(%s)\nHigh: %d(%s)\nMedium: %d(%s)\nLow: %d(%s)\n",
 		result.Total.Count,
 		result.Total.Percentage,
