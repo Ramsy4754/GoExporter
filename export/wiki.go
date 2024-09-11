@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 )
 
@@ -24,7 +23,8 @@ func sendToWiki(request *thirdParty.WikiRequest, payload *thirdParty.WikiPage) {
 		return
 	}
 
-	req, err := http.NewRequest("POST", request.InstanceUrl, bytes.NewBuffer(payloadBytes))
+	requestUrl := fmt.Sprintf("%s/wiki/rest/api/content", request.InstanceUrl)
+	req, err := http.NewRequest("POST", requestUrl, bytes.NewBuffer(payloadBytes))
 	if err != nil {
 		logger.Println("failed to create wiki request:", err)
 		return
@@ -37,12 +37,6 @@ func sendToWiki(request *thirdParty.WikiRequest, payload *thirdParty.WikiPage) {
 	if err != nil {
 		logger.Println("failed to send wiki request:", err)
 	}
-	defer func(Body io.ReadCloser) {
-		err = Body.Close()
-		if err != nil {
-			logger.Println("failed to close wiki response body:", err)
-		}
-	}(resp.Body)
 
 	logger.Println("wiki response status:", resp.Status)
 }
